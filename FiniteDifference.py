@@ -8,8 +8,11 @@ def build_matrix(xdim, zdim):
 	
 	for i in range(dims):
 		for j in range(dims):
+			if i < xdim or i >= dims-xdim:
+				if i==j:
+					matrix[i,j] = 1
 			# diagonal
-			if i == j:
+			elif i == j:
 				matrix[i,j] = -4
 			elif (i+1) % xdim == 0:
 				if i-j == 1:
@@ -35,6 +38,29 @@ def build_matrix(xdim, zdim):
 
 	return matrix
 
-mat = build_matrix(3,3)
-print mat
+def init_theta(xdim, zdim):
+	dims = xdim * zdim
+	theta = np.zeros(dims)
 
+	for i in range(dims):
+		if i < xdim/2:
+			theta[i] = np.pi/2
+		if i >= dims-xdim and i < dims-xdim/2:
+			theta[i] = np.pi/2
+	print theta
+	return theta
+			
+def solve():
+	deltaX = 1
+	xdim = 10
+	zdim = 10
+	mat = build_matrix(xdim, zdim)
+
+	mat *= 1/deltaX
+	b = init_theta(xdim,zdim)
+	theta = np.linalg.solve(mat, b)
+	return theta
+	
+
+theta = solve()
+print theta
